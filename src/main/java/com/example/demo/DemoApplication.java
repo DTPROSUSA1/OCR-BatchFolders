@@ -27,6 +27,7 @@ public class DemoApplication {
 
 	public static void main(String[] argv) throws IOException
     {
+
 		//load config.properties
 		Properties prop = new Properties();
 	
@@ -41,52 +42,46 @@ public class DemoApplication {
 		//Code
 		File[] files = new File(watch_folder_directory).listFiles(); 
 		new File(target_directory + "Batch1").mkdirs();
-		int count = 0;
-		int batch_number = 1;
-		boolean found = false;
-		
+		int batch_number = 0;
+
+
+		File[] files1 = new File(target_directory).listFiles(); 
+			for (File f1 : files1){
+				String find1 = f1.getName();
+				if (find1.contains("Batch")){
+					batch_number++;
+				}
+			}
+
 
 		for(File f : files){
 			if(f.getName().toLowerCase().indexOf(s.toLowerCase()) != -1){
-		
-					File[] files1 = new File(target_directory).listFiles(); 
-					for (File f1 : files1){
-						String find1 = f1.getName();
-						if (find1.contains("Batch")){
-							batch_number++;
-							count++;
-							found = true;
-						}
+					
+					String ss1 = String.valueOf(batch_number);
+					String batch_name2 = "Batch" + ss1;
+					String x4 = (target_directory+batch_name2);
+					File direc = new File(x4);
+					if (direc.list().length == max){
+						//int fileSize = direc.list().length;
+						batch_number+=1;
+						String ss2 = String.valueOf(batch_number);
+						String batch_name3 = "Batch" + ss2;
+						String x5 = (target_directory+batch_name3);
+						batch_name2 = batch_name3;
+						new File(x5).mkdirs();
 					}
-
-					//String temp = f.getName();
-					//String temp1 = (watch_folder_directory + temp);
-					//File tempFile = new File(temp1);
-					//boolean exists = tempFile.exists();
-					//System.out.println(exists);
-					//File direc = new File(watch_folder_directory);
-					//int fileSize = direc.list().length;
-					//System.out.println(fileSize);
-
-					if (count == max || found == true){
-						batch_number++;
-						count = 0;
-						String bname = String.valueOf(batch_number);
-						String batch_name1 = "Batch" + bname;
-						new File(target_directory + batch_name1).mkdirs();
-					}
+					//System.out.println(batch_number);
+					//System.out.println(x4);
+					//System.out.println(direc.list().length);
+					
 
 					String x1 = f.getName();
 					String x2 = (watch_folder_directory + x1);
-					//System.out.println(x2);
 					File fileToCopy = new File(x2);
 					FileInputStream inputStream = new FileInputStream(fileToCopy);
 					FileChannel inChannel = inputStream.getChannel();
 
-					String ss = String.valueOf(batch_number);
-					String batch_name = "Batch" + ss;
-					String x3 = (target_directory+batch_name+"/"+x1);
-					//System.out.println(x3);
+					String x3 = (target_directory+batch_name2+"/"+x1);
 					File newFile = new File(x3);
 					FileOutputStream outputStream = new FileOutputStream(newFile);
 					FileChannel outChannel = outputStream.getChannel();
@@ -94,9 +89,9 @@ public class DemoApplication {
 					inChannel.transferTo(0, fileToCopy.length(), outChannel);
 					inputStream.close();
 					outputStream.close();
-					count++;
+					
 
-					//deltes original files
+					//deletes original files
 					fileToCopy.delete();
 			}
 		}
