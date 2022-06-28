@@ -74,6 +74,7 @@ public class DemoApplication {
 					//System.out.println(x4);
 					//System.out.println(direc.list().length);
 					
+					boolean matches = false;
 
 					String x1 = f.getName();
 					String x2 = (watch_folder_directory + x1);
@@ -82,17 +83,31 @@ public class DemoApplication {
 					FileChannel inChannel = inputStream.getChannel();
 
 					String x3 = (target_directory+batch_name2+"/"+x1);
-					File newFile = new File(x3);
-					FileOutputStream outputStream = new FileOutputStream(newFile);
-					FileChannel outChannel = outputStream.getChannel();
 
-					inChannel.transferTo(0, fileToCopy.length(), outChannel);
+					File[] files10 = new File(target_directory+batch_name2).listFiles(); 
+					for (File f4 : files10){
+						String similar = f4.getName();
+						if (similar.contains(x1)){
+							matches = true;
+						}
+					}
+					
+					if (matches == false){
+						File newFile = new File(x3);
+						FileOutputStream outputStream = new FileOutputStream(newFile);
+						FileChannel outChannel = outputStream.getChannel();
+
+						inChannel.transferTo(0, fileToCopy.length(), outChannel);
+						inputStream.close();
+						outputStream.close();
+					}
+
 					inputStream.close();
-					outputStream.close();
 					
 
 					//deletes original files
 					fileToCopy.delete();
+					matches = false;
 			}
 		}
     }
