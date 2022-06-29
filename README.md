@@ -1,5 +1,5 @@
 "# OCR-BatchFolders" 
 
-# Needed: Apache-Maven, Springboot, Java or Jdk hotspot 
+# Needed (install): Apache-Maven, Springboot, and Java or Jdk hotspot 
 
-# mvnw spring-boot:run
+# mvnw spring-boot:run  //Command to run in project directory
