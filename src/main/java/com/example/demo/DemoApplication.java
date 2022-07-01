@@ -90,6 +90,7 @@ public class DemoApplication {
 				ArrayList<Parameter> params = new ArrayList<Parameter>();
 				//replace this hardcoded parameters with all batches
 				params.add(new Parameter("operation", "aem_invoke_workflow"));
+				params.add(new Parameter("workflowName", "OCR_Workflow"));
 				params.add(new Parameter("fileNameLocation", file.getAbsolutePath()));
 				params.add(new Parameter("batchId", batch.Name));
 
@@ -98,19 +99,21 @@ public class DemoApplication {
 				HttpURLConnection postConnection = (HttpURLConnection) obj.openConnection();
 				postConnection.setRequestProperty ("Authorization", basicAuth);
 				postConnection.setRequestMethod("POST");
-				postConnection.setRequestProperty("userId", "a1bcdefgh");
-				postConnection.setRequestProperty("Content-Type", "application/json");
+				//postConnection.setRequestProperty("userId", "a1bcdefgh");
+				//postConnection.setRequestProperty("Content-Type", "application/json");
 				postConnection.setDoOutput(true);
 				OutputStream os = postConnection.getOutputStream();
 				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-				writer.write(getQuery(params));
+				String queryParams = getQuery(params);
+				System.out.println("Query Params :  " + queryParams);
+				writer.write(queryParams);
 				writer.flush();
 				writer.close();
 				os.close();
 				int responseCode = postConnection.getResponseCode();
 				System.out.println("POST Response Code :  " + responseCode);
 				System.out.println("POST Response Message : " + postConnection.getResponseMessage());
-				if (responseCode == HttpURLConnection.HTTP_CREATED) { //success
+				if (responseCode == HttpURLConnection.HTTP_OK) { //success
 					BufferedReader in = new BufferedReader(new InputStreamReader(
 						postConnection.getInputStream()));
 					String inputLine;
